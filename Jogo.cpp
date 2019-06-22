@@ -14,9 +14,14 @@ void Jogo::inicializar()
 
 	//	O resto da inicialização vem aqui!
 	//	...
+	gRecursos.carregarSpriteSheet("Bomb", "assets/spritesheets/Coin.png");
+	bomba.setSpriteBomb("Bomb");
 
-	gRecursos.carregarSpriteSheet("Thief", "assets/spritesheets/Thief.png", 4, 1);
-	character.setSpriteSheet("Thief");
+	gRecursos.carregarSpriteSheet("Explosion", "assets/spritesheets/Fire.png");
+	bomba.setSpriteExplosion("Explosion");
+
+	gRecursos.carregarSpriteSheet("Ned", "assets/spritesheets/ned.png", 4, 3);
+	character.setSpriteSheet("Ned");
 
 	gRecursos.carregarSpriteSheet("1", "assets/blocos/1.png");
 	blocos[1].setSprite("1");
@@ -89,6 +94,7 @@ void Jogo::telaJogo()
 	desenharFase();
 	mover();
 	character.desenhar(x, y);
+	bomba.colocarBomba(x, y);
 }
 
 void Jogo::telaMenu()
@@ -150,7 +156,7 @@ void Jogo::mover()
 	{
 		xAux = x;
 		yAux = y;
-		character.setAnimacao(3);
+		character.setAnimacao(0);
 		character.avancarAnimacao();
 		direcao = 1;
 	}
@@ -159,7 +165,7 @@ void Jogo::mover()
 	{
 		xAux = x;
 		yAux = y;
-		character.setAnimacao(0);
+		character.setAnimacao(2);
 		character.avancarAnimacao();
 		direcao = 2;
 	}
@@ -168,7 +174,7 @@ void Jogo::mover()
 	{
 		xAux = x;
 		yAux = y;
-		character.setAnimacao(2);
+		character.setAnimacao(3);
 		character.avancarAnimacao();
 		direcao = 3;
 	}

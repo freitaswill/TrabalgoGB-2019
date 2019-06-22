@@ -1,0 +1,25 @@
+#pragma once
+#include "libUnicornio.h"
+
+class Bomba
+{
+public:
+	Bomba();
+	~Bomba();
+	void explodir(int eCima, int eBaixo, int eEsquerda, int eDireita, int x, int y);
+	void colocarBomba(int xPlayer, int yPlayer);
+	void setSpriteBomb(string sprite);
+	void setSpriteExplosion(string sprite);
+	//Mudar a sprite da bomba antes de explodir
+
+	//Quando explodir para desenhar a explosao vao ser quatro variáveis -> terá um for para cada
+	//Ex: for(int i =0; i < variavel A; i++)
+	//desenhar(posição player(posicao da bomba talvez?) + 50 x i);
+
+private:
+	int contagemBom, contagemEx, xAux, yAux;
+	bool colocou;
+	int eCima, eBaixo, eEsquerda, eDireita;
+	Sprite bombSprite, explosao;
+};
+

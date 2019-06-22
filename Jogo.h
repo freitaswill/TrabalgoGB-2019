@@ -2,6 +2,7 @@
 #include "libUnicornio.h"
 #include <stack>
 #include "Bloco.h"
+#include "Bomba.h"
 
 enum Tela { tJogo, tMenu, sair, tGameOver };
 
@@ -33,5 +34,6 @@ public:
 	void mover();
 	int mapa[13][13];
 	Bloco blocos[3];
+	Bomba bomba;
 };
 
