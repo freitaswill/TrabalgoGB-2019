@@ -1,5 +1,0 @@
-﻿  Jogo.cpp
-c:\users\theo5154\desktop\libunicornio-master\projetos\nova pasta\jogo.cpp(43): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
-c:\users\theo5154\desktop\libunicornio-master\projetos\nova pasta\jogo.cpp(47): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
-  base.vcxproj -> C:\Users\Theo5154\Desktop\libUnicornio-master\projetos\Nova pasta\bin\base-debug.exe
-  base.vcxproj -> C:\Users\Theo5154\Desktop\libUnicornio-master\projetos\Nova pasta\bin\base-debug.pdb (Full PDB)

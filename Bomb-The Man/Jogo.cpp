@@ -1,0 +1,582 @@
+#include "Jogo.h"
+#include<ctime>
+
+
+Jogo::Jogo()
+{
+	
+}
+
+Jogo::~Jogo()
+{
+}
+
+void Jogo::inicializar()
+{
+	/*srand(time(0));
+	int random = rand() % 800;
+	int random2 = rand() % 600;*/
+
+	uniInicializar(800, 600, false);
+	
+	carregadorAssets.carregarAssets();
+
+	bomba.setSpriteBomb("Coin");
+	bomba.setSpriteExplosion("Explosion");
+	player.setSpriteSheet("BomberMan");
+
+	blocos[1].setSprite("1");
+	blocos[2].setSprite("2");
+
+	fundoMenu.setSpriteSheet("fundoMenu");
+	fundoGameOver.setSpriteSheet("fundoGameOver");
+	fundoJogo.setSpriteSheet("fundoJogo2");
+	fundoCadastrar.setSpriteSheet("fundoCadastrar");
+	fundoCreditos.setSpriteSheet("fundoCreditos");
+	fundoLoad.setSpriteSheet("fundoLoad");
+	fundoLogin.setSpriteSheet("fundoLogin");
+	fundoRanking.setSpriteSheet("fundoRanking");
+	fundoVitoria.setSpriteSheet("fundoWin");
+	
+	bJogar.setSpriteSheet("botaoJogar");
+	bJogar.setPos(gJanela.getLargura() / 2, 150);
+	
+	bSair.setSpriteSheet("botaoSair");
+	bSair.setPos(gJanela.getLargura() / 2, 510);
+
+	bCadastrar.setSpriteSheet("botaoCadastrar");
+	bCadastrar.setPos(gJanela.getLargura() / 2, 210);
+	
+	bCreditos.setSpriteSheet("botaoCreditos");
+	bCreditos.setPos(gJanela.getLargura() / 2, 450);
+
+	bSim.setSpriteSheet("botaoSim");
+	bSim.setPos(gJanela.getLargura() / 2, 440);
+
+	bNao.setSpriteSheet("botaoNao");
+	bNao.setPos(gJanela.getLargura() / 2, 440);
+
+	bVoltar.setSpriteSheet("botaoVoltar");
+	bVoltar.setPos(gJanela.getLargura() / 2, 510);
+
+	bRanking.setSpriteSheet("botaoRanking");
+	bRanking.setPos(gJanela.getLargura() / 2, 390);
+
+	bLogin.setSpriteSheet("botaoLogin");
+	bLogin.setPos(gJanela.getLargura() / 2, 270);
+
+	bLoad.setSpriteSheet("botaoLoad");
+	bLoad.setPos(gJanela.getLargura() / 2, 330);
+
+	telas.push(fundoMenu);
+
+	inicializarFase("config/fases/fase", pontosJogadores, qtdVidas);
+
+	telaAtual = tMenu;
+
+	input.inicializar();
+	carr.carregadorDeContas();
+	//carr.cadElog.setConta(0, carr.cadElog.getConta()->usuario, carr.cadElog.getConta()->senha);
+	carr.cadElog.setID(carr.getQtdContas());
+	carregarRanking();
+}
+
+void Jogo::finalizar()
+{
+	//Finalizar o input de texto
+	input.finalizar();
+	
+	//	Descarregar todos os recursos (fonte para o texto)
+	gRecursos.descarregarTudo();
+
+	uniFinalizar();
+}
+
+void Jogo::executar()
+{
+	while(!gTeclado.soltou[TECLA_ESC] && !gEventos.sair && telaAtual != sair)
+	{
+		uniIniciarFrame();
+
+		telas.top().desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+		switch (telaAtual)
+		{
+		case tMenu: telaMenu();
+			if (telaAtual == tJogo)
+			{
+				resetar();
+				//carregarFase(faseAtual);
+			}
+			break;
+		case tGameOver: telaGameOver();
+			break;
+		case tJogo: telaJogo();
+			break;
+		case tCadastro: telaCadastro();
+			break;
+		case tLogin: telaLogin();
+			break;
+		case tCreditos: telaCreditos();
+			break;
+		case tRanking: telaRanking();
+			break;
+		case tLoad: telaLoad();
+			break;
+		case tVitoria: telaVitoria();
+		}
+
+		user = input.getTxt().getString();
+		senh = input.getTxtSenha().getString();
+
+		uniTerminarFrame();
+	}
+}
+
+void Jogo::telaJogo()
+{	
+	if (gTeclado.pressionou[TECLA_M])
+	{
+		qtdVidas--;
+	}
+
+	pontosJogadores += 1;
+	gDebug.depurar("vidas", qtdVidas);
+
+	//if telaatual == 1
+	fundoJogo.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+	//else
+	desenharFase();
+	mover();
+	player.desenhar(x, y);
+	bomba.colocarBomba(x, y);
+
+	if (verificarVitoria() == true) {
+
+		//Se o jogador ganhar então carrega a proxima fase
+		faseAtual++;
+		carregarFase(faseAtual);
+
+	}
+	//Teste
+	//Jogador Ganhou
+	if (faseAtual > nFases) {
+
+
+		telaAtual = tVitoria;
+
+	}
+
+	//Jogador perdeu
+	if (qtdVidas <= 0) {
+
+		pontosJogadores = pontosJogadores; //fase.getpontuacao();
+		ofstream arqRank("../ranking.txt");
+		for (int i = 0; i < 5; i++) {
+			if (pontosJogadores > ranking[i]) {
+				for (int j = 4; j > i; j--) {
+					ranking[j] = ranking[j - 1];
+				}
+				colocacao = i;
+				ranking[i] = pontosJogadores;
+				i = 20;
+			}
+		}
+		for (int i = 0; i < 5; i++)
+			if (arqRank.is_open()) {
+				arqRank << ranking[i] << endl;
+			}
+		arqRank.close();
+		telaAtual = tGameOver;
+	}
+}
+
+void Jogo::telaMenu()
+{
+	fundoMenu.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	gMouse.mostrarCursor();
+
+	bJogar.atualizar();
+	bJogar.desenhar();
+	if (bJogar.estaClicado())
+	{
+		telas.push(fundoJogo);
+		telaAtual = tJogo;
+	}
+
+	bSair.atualizar();
+	bSair.desenhar();
+	if (bSair.estaClicado())
+	{
+		telaAtual = sair;
+	}
+
+	bLogin.atualizar();
+	bLogin.desenhar();
+	if (bLogin.estaClicado())
+	{
+		telaAtual = tLogin;
+	}
+
+	bCadastrar.atualizar();
+	bCadastrar.desenhar();
+	if (bCadastrar.estaClicado())
+	{
+		telaAtual = tCadastro;
+	}
+
+	bCreditos.atualizar();
+	bCreditos.desenhar();
+	if (bCreditos.estaClicado())
+	{
+		telaAtual = tCreditos;
+	}
+
+	bRanking.atualizar();
+	bRanking.desenhar();
+	if (bRanking.estaClicado())
+	{
+		telaAtual = tRanking;
+	}
+
+	bLoad.atualizar();
+	bLoad.desenhar();
+	if (bLoad.estaClicado())
+	{
+		telaAtual = tLoad;
+	}
+}
+
+void Jogo::telaCadastro()
+{
+	fundoCadastrar.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	if (input.getTrocaString() == true)
+	{
+		input.atualizar();
+		input.desenharSenha();
+	}
+	else
+	{
+		input.atualizar();
+		input.desenhar();
+	}
+	
+	carr.cadElog.cadastrar(user, senh);
+
+	if (gTeclado.pressionou[TECLA_ENTER] && carr.cadElog.getApertou() == true)
+	{
+		telaAtual = tLogin;
+		input.finalizar();
+		input.inicializar();
+		input.setTrocaString(false);
+	}
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+}
+
+void Jogo::telaLogin()
+{
+	fundoLogin.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	carr.cadElog.setApertou(false);
+
+	if (gTeclado.pressionou[TECLA_TAB])
+	{
+		userTeste = user;
+	}
+
+	if (input.getTrocaString() == true)
+	{
+		input.atualizar();
+		input.desenharSenha();
+	}
+	else
+	{
+		input.atualizar();
+		input.desenhar();
+	}
+
+	if (gTeclado.pressionou[TECLA_ENTER] && carr.cadElog.getApertou() == false)
+	{
+		carr.cadElog.logar(userTeste, senh);
+
+		if (carr.cadElog.getLogou() == true)
+		{
+			input.finalizar();
+			telaAtual = tJogo;
+		}
+	}
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+}
+
+void Jogo::telaGameOver()
+{
+	fundoGameOver.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+}
+
+void Jogo::telaVitoria()
+{
+	fundoVitoria.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+}
+
+void Jogo::telaCreditos()
+{
+	fundoCreditos.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+}
+
+void Jogo::telaRanking()
+{
+	fundoRanking.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+	else if (colocacao < 10 && colocacao > -1) {
+		texto.setString("Você está em " + to_string(colocacao + 1) + "º Lugar");
+		texto.setCor(255, 255, 255);
+		texto.desenhar(250, 430);
+	}
+	for (int i = 0; i < 5; i++) {
+
+		texto.setString(to_string(i + 1) + "º Lugar: " + to_string(ranking[i]));
+		texto.setCor(0, 0, 0);
+		texto.desenhar(gJanela.getLargura() / 2 - 150, (gJanela.getAltura() / 2 + 50 * i - 150));
+	}
+}
+
+void Jogo::telaLoad()
+{
+	fundoLoad.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
+
+	bVoltar.atualizar();
+	bVoltar.desenhar();
+	if (bVoltar.estaClicado())
+	{
+		telaAtual = tMenu;
+	}
+}
+
+bool Jogo::verificarVitoria()
+{
+	return false;
+}
+
+void Jogo::resetar()
+{
+	pontosJogadores = 0;
+	faseAtual = 1;
+	qtdVidas = 3;
+	player.desenhar(x, y);
+}
+
+void Jogo::inicializarFase(string nomeArq, int ptsJogadores, int vidas)
+{
+	ifstream arq(nomeArq + to_string(faseAtual) + ".txt");
+
+	pontosJogadores = ptsJogadores;
+	qtdVidas = vidas;
+
+	string sToken;
+	int iToken, r, g, b;
+	float fToken;
+	Cor cor;
+
+	//fonte
+	arq >> sToken;
+	texto.setFonte(sToken);
+	texto.setAncora(0, 0.5);
+
+	arq >> textoPontos >> r >> g >> b >> posPontos.x >> posPontos.y;
+	corPontos.set(r, g, b, 255);
+	arq >> textoVidas >> r >> g >> b >> posVidas.x >> posVidas.y;
+	corVidas.set(r, g, b, 255);
+	texto.setString(textoPontos + to_string(pontosJogadores));
+	texto.desenhar(posPontos.x, posPontos.y);
+	texto.setString(textoVidas + to_string(qtdVidas));
+	texto.desenhar(posVidas.x, posVidas.y);
+
+	for (int y = 0; y < 13; y++)
+		for (int x = 0; x < 13; x++)
+		{
+			arq >> iToken;
+			mapa[x][y] = iToken;
+		}
+}
+
+void Jogo::carregarFase(int f)
+{
+	faseAtual = f;
+	if (faseAtual > 1) {
+
+		pontosJogadores = pontosJogadores;//fase.getpontuacao();
+	}
+	else {
+
+		pontosJogadores = 0;
+	}
+	if (faseAtual <= nFases)
+	{
+		inicializarFase("configs/fases/fase" + to_string(faseAtual) + ".txt", pontosJogadores, qtdVidas);
+	}
+	else {
+
+		ofstream arqRanking("../ranking.txt");
+		for (int i = 0; i < 5; i++) {
+			if (pontosJogadores > ranking[i]) {
+				for (int j = 4; j > i; j--) {
+					ranking[j] = ranking[j - 1];
+				}
+				colocacao = i;
+				ranking[i] = pontosJogadores;
+				i = 20;
+			}
+		}
+		for (int i = 0; i < 5; i++) {
+			if (arqRanking.is_open()) {
+
+				arqRanking << ranking[i] << endl;
+			}
+			arqRanking.close();
+		}
+
+	}
+}
+
+void Jogo::desenharFase()
+{
+	for (int y = 0; y < 13; y++)
+		for (int x = 0; x < 13; x++)
+		{
+			if (mapa[x][y] != 0)
+				blocos[mapa[x][y]].desenhar(blocos[mapa[x][y]].getSprite().getLargura()*x + 100, blocos[mapa[x][y]].getSprite().getAltura()*y);
+		}
+
+	texto.setString(textoPontos + "   " + to_string(pontosJogadores));
+	texto.desenhar(posPontos.x, posPontos.y);
+	texto.setString(textoVidas + "    " + to_string(qtdVidas));
+	texto.desenhar(posVidas.x, posVidas.y);
+}
+
+void Jogo::AtualizarFase()
+{
+	//pontoJogadores = pontos;
+}
+
+void Jogo::carregarRanking()
+{
+	ifstream arqRanking("../ranking.txt", ios::in);
+
+	resetar();
+	if (arqRanking.is_open()) {
+		for (int i = 0; i < 5; i++) {
+
+			arqRanking >> ranking[i];
+		}
+	}
+}
+
+void Jogo::mover()
+{
+	if (gTeclado.segurando[TECLA_W] && direcao == 0 && mapa[tileX][tileY - 1] == 0)
+	{
+		xAux = x;
+		yAux = y;
+		player.setAnimacao(0);
+		player.avancarAnimacao();
+		direcao = 1;
+	}
+
+	else if (gTeclado.segurando[TECLA_S] && direcao == 0 && mapa[tileX][tileY + 1] == 0)
+	{
+		xAux = x;
+		yAux = y;
+		player.setAnimacao(2);
+		player.avancarAnimacao();
+		direcao = 2;
+	}
+
+	else if (gTeclado.segurando[TECLA_D] && direcao == 0 && mapa[tileX + 1][tileY] == 0)
+	{
+		xAux = x;
+		yAux = y;
+		player.setAnimacao(3);
+		player.avancarAnimacao();
+		direcao = 3;
+	}
+
+	else if (gTeclado.segurando[TECLA_A] && direcao == 0 && mapa[tileX - 1][tileY] == 0)
+	{
+		xAux = x;
+		yAux = y;
+		player.setAnimacao(1);
+		player.avancarAnimacao();
+		direcao = 4;
+	}
+	if (direcao == 1) {
+		y -= vel;
+		if (y + 50 == yAux) {
+			direcao = 0;
+			tileY -= 1;
+		}
+	}
+	else if (direcao == 2) {
+		y += vel;
+		if (y - 50 == yAux) {
+			direcao = 0;
+			tileY += 1;
+		}
+	}
+	else if (direcao == 3) {
+		x += vel;
+		if (x - 50 == xAux) {
+			direcao = 0;
+			tileX += 1;
+		}
+	}
+	else if (direcao == 4) {
+		x -= vel;
+		if (x + 50 == xAux) {
+			direcao = 0;
+			tileX -= 1;
+		}
+	}
+}
+
+
