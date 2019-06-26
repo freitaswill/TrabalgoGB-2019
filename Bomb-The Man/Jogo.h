@@ -40,9 +40,9 @@ protected:
 	string user, senh, userTeste;
 
 	Texto texto;
-	string textoVidas, textoPontos;
+	string textoVidas, textoPontos, nomeRanking;
 	Vetor2D posVidas, posPontos;
-	Cor corVidas, corPontos;
+	Cor corVidas, corPontos, corNomeRanking;
 
 	void telaJogo();
 	void telaMenu();

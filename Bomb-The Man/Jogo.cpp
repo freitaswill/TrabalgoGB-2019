@@ -170,23 +170,6 @@ void Jogo::telaJogo()
 	//Jogador perdeu
 	if (qtdVidas <= 0) {
 
-		pontosJogadores = pontosJogadores; //fase.getpontuacao();
-		ofstream arqRank("../ranking.txt");
-		for (int i = 0; i < 5; i++) {
-			if (pontosJogadores > ranking[i]) {
-				for (int j = 4; j > i; j--) {
-					ranking[j] = ranking[j - 1];
-				}
-				colocacao = i;
-				ranking[i] = pontosJogadores;
-				i = 20;
-			}
-		}
-		for (int i = 0; i < 5; i++)
-			if (arqRank.is_open()) {
-				arqRank << ranking[i] << endl;
-			}
-		arqRank.close();
 		telaAtual = tGameOver;
 	}
 }
@@ -326,11 +309,37 @@ void Jogo::telaGameOver()
 {
 	fundoGameOver.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
 
+	texto.setString("Digite seu nome para colocar no ranking: ");
+	texto.desenhar(100, 200);
+	texto.setCor(corNomeRanking, true);
+
+	input.atualizarTexRanking();
+	input.desenharNomeRanking();
+
 	bVoltar.atualizar();
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		nomeRanking = input.getTxtRanking().getString();
+		gDebug.depurar("nomeRanking", nomeRanking);
+
+		pontosJogadores = pontosJogadores; //fase.getpontuacao();
+		ofstream arqRank("../ranking.txt");
+		for (int i = 0; i < 5; i++) {
+			if (pontosJogadores > ranking[i]) {
+				for (int j = 4; j > i; j--) {
+					ranking[j] = ranking[j - 1];
+				}
+				colocacao = i;
+				ranking[i] = pontosJogadores;
+				i = 20;
+			}
+		}
+		for (int i = 0; i < 5; i++)
+			if (arqRank.is_open()) {
+				arqRank << nomeRanking <<ranking[i] << endl;
+			}
 	}
 }
 
@@ -431,6 +440,7 @@ void Jogo::inicializarFase(string nomeArq, int ptsJogadores, int vidas)
 	texto.desenhar(posPontos.x, posPontos.y);
 	texto.setString(textoVidas + to_string(qtdVidas));
 	texto.desenhar(posVidas.x, posVidas.y);
+	corNomeRanking.set(165, 42, 42, 255);
 
 	for (int y = 0; y < 13; y++)
 		for (int x = 0; x < 13; x++)
@@ -471,7 +481,7 @@ void Jogo::carregarFase(int f)
 		for (int i = 0; i < 5; i++) {
 			if (arqRanking.is_open()) {
 
-				arqRanking << ranking[i] << endl;
+				arqRanking << nomeRanking << ranking[i] << endl;
 			}
 			arqRanking.close();
 		}
@@ -507,7 +517,7 @@ void Jogo::carregarRanking()
 	if (arqRanking.is_open()) {
 		for (int i = 0; i < 5; i++) {
 
-			arqRanking >> ranking[i];
+			arqRanking >> nomeRanking >> ranking[i];
 		}
 	}
 }

@@ -19,6 +19,8 @@ void InputTexto::inicializar()
 	txtSenha.setFonte("fonte1");
 	//txtSenha.setString("");
 
+	txtNomeRanking.setFonte("fonte1");
+
 	//	1) Habilitar o input de texto
 	//		Isso faz com que todas as teclas pressionadas pelo usuário sejam tratadas como texto
 	//		e guarda o resultado desse texto em uma string.
@@ -41,7 +43,8 @@ void InputTexto::finalizar()
 
 	//	Apagar o texto
 	txt.apagar();
-	txtSenha.apagar();
+	txtSenha.apagar(); 
+	txtNomeRanking.apagar();
 }
 
 void InputTexto::atualizar()
@@ -118,6 +121,69 @@ void InputTexto::atualizar()
 	{
 		txt.setString(gTeclado.inputTexto.getString());
 	}
+}
+
+void InputTexto::atualizarTexRanking()
+{
+	//	2) Controlar a edição do texto.
+	//		Apagar o texto com tecla voltar ou delete
+	if (gTeclado.pressionou[TECLA_VOLTAR])
+	{
+		gTeclado.inputTexto.apagar();
+	}
+	if (gTeclado.pressionou[TECLA_DELETE])
+	{
+		if (gTeclado.inputTexto.getTamanhoSelecao() != 0)
+			gTeclado.inputTexto.apagar();
+		else if (gTeclado.inputTexto.getPosCursor() < gTeclado.inputTexto.getString().size())
+		{
+			gTeclado.inputTexto.moverPosCursorParaDir();
+			gTeclado.inputTexto.apagar();
+		}
+	}
+
+	//Mover a seleção do texto
+	if (gTeclado.segurando[TECLA_SHIFT_ESQ])
+	{
+		if (gTeclado.pressionou[TECLA_ESQ])
+		{
+			gTeclado.inputTexto.moverSelecaoParaEsq();
+		}
+		if (gTeclado.pressionou[TECLA_DIR])
+		{
+			gTeclado.inputTexto.moverSelecaoParaDir();
+		}
+		if (gTeclado.pressionou[TECLA_HOME])
+		{
+			gTeclado.inputTexto.moverSelecaoParaInicio();
+		}
+		if (gTeclado.pressionou[TECLA_END])
+		{
+			gTeclado.inputTexto.moverSelecaoParaFim();
+		}
+	}
+	//Mover o cursor do texto
+	else
+	{
+		if (gTeclado.pressionou[TECLA_ESQ])
+		{
+			gTeclado.inputTexto.moverPosCursorParaEsq();
+		}
+		if (gTeclado.pressionou[TECLA_DIR])
+		{
+			gTeclado.inputTexto.moverPosCursorParaDir();
+		}
+		if (gTeclado.pressionou[TECLA_HOME])
+		{
+			gTeclado.inputTexto.moverPosCursorParaInicio();
+		}
+		if (gTeclado.pressionou[TECLA_END])
+		{
+			gTeclado.inputTexto.moverPosCursorParaFim();
+		}
+	}
+	
+	txtNomeRanking.setString(gTeclado.inputTexto.getString());	
 }
 
 void InputTexto::desenharSenha()
@@ -198,6 +264,45 @@ void InputTexto::desenhar()
 	gGraficos.desenharLinha(xCursor, yCursor, xCursor, yCursor + altCursor);
 }
 
+void InputTexto::desenharNomeRanking()
+{
+	//4) Mostrar o texto na tela
+	txtNomeRanking.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2 - 20);
+
+	//Desenhar seleção
+	int tamSelecao = gTeclado.inputTexto.getTamanhoSelecao();
+	if (tamSelecao != 0)
+	{
+		Quad retan;
+		retan.larg = 0;
+		retan.alt = txtNomeRanking.getFonte()->getAlturaGlifos();
+		retan.x = (gJanela.getLargura() / 2) - txt.getLargura() / 2;
+		retan.y = (gJanela.getAltura() / 2) - retan.alt / 2;
+
+		int posCursor = gTeclado.inputTexto.getPosCursor();
+		int inicio = min(posCursor, posCursor + tamSelecao);
+		int fim = max(posCursor, posCursor + tamSelecao);
+
+		for (int i = inicio; i < fim; ++i)
+			retan.larg += txtNomeRanking.getLetra(i)->glifo->avanco*txt.getEscalaX();
+
+		for (int i = 0; i < inicio; ++i)
+			retan.x += txtNomeRanking.getLetra(i)->glifo->avanco*txt.getEscalaX();
+
+		gGraficos.desenharRetangulo(retan, 30, 200, 230);
+	}
+
+	//Desenhar o cursor do texto
+	int altCursor = txtNomeRanking.getFonte()->getAlturaGlifos();
+	int xCursor = (gJanela.getLargura() / 2) - txtNomeRanking.getLargura() / 2;
+	int yCursor = (gJanela.getAltura() / 2 - 20) - altCursor / 2;
+	int pos = gTeclado.inputTexto.getPosCursor();
+	for (int i = 0; i < pos; ++i)
+		xCursor += txtNomeRanking.getLetra(i)->glifo->avanco*txt.getEscalaX();
+
+	gGraficos.desenharLinha(xCursor, yCursor, xCursor, yCursor + altCursor);
+}
+
 Texto InputTexto::getTxt()
 {
 	return Texto(txt);
@@ -206,6 +311,11 @@ Texto InputTexto::getTxt()
 Texto InputTexto::getTxtSenha()
 {
 	return Texto(txtSenha);
+}
+
+Texto InputTexto::getTxtRanking()
+{
+	return Texto(txtNomeRanking);
 }
 
 
