@@ -60,7 +60,7 @@ void Bomba::colocarBomba(int xPlayer, int yPlayer)
 		if (contagemEx > 0)
 		{
 			gDebug.depurar("contagemExplos", contagemEx);
-			explodir(4, 2, 1, 3, xAux, yAux);
+			explodir(2, 2, 1, 2, xAux, yAux);
 			contagemEx -= 1;
 		}
 		else

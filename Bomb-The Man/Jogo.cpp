@@ -21,9 +21,11 @@ void Jogo::inicializar()
 	
 	carregadorAssets.carregarAssets();
 
-	bomba.setSpriteBomb("Coin");
+	bomba.setSpriteBomb("Bomb");
 	bomba.setSpriteExplosion("Explosion");
 	player.setSpriteSheet("BomberMan");
+	power.setSpriteBombUp("BombaUp");
+	power.setSpriteTenis("Tenis");
 
 	blocos[1].setSprite("1");
 	blocos[2].setSprite("2");
@@ -103,11 +105,6 @@ void Jogo::executar()
 		switch (telaAtual)
 		{
 		case tMenu: telaMenu();
-			if (telaAtual == tJogo)
-			{
-				resetar();
-				//carregarFase(faseAtual);
-			}
 			break;
 		case tGameOver: telaGameOver();
 			break;
@@ -130,6 +127,11 @@ void Jogo::executar()
 		senh = input.getTxtSenha().getString();
 
 		uniTerminarFrame();
+
+		if (telaAtual == tMenu)
+		{
+			pontosJogadores = 0;
+		}
 	}
 }
 
@@ -171,6 +173,7 @@ void Jogo::telaJogo()
 	if (qtdVidas <= 0) {
 
 		telaAtual = tGameOver;
+		input.inicializar();
 	}
 }
 
@@ -320,14 +323,20 @@ void Jogo::telaGameOver()
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
 	{
+		resetar();
 		telaAtual = tMenu;
-		nomeRanking = input.getTxtRanking().getString();
-		gDebug.depurar("nomeRanking", nomeRanking);
-
-		pontosJogadores = pontosJogadores; //fase.getpontuacao();
+		/*for (int i = 0; i < 5; i++)
+		{
+			nomeRanking[i] = input.getTxtRanking().getString();
+			gDebug.depurar("nomeRanking", nomeRanking[i]);
+		}*/
+		
+		pontosJogadores = pontosJogadores; 
 		ofstream arqRank("../ranking.txt");
 		for (int i = 0; i < 5; i++) {
 			if (pontosJogadores > ranking[i]) {
+				nomeRanking[i] = input.getTxtRanking().getString();
+				gDebug.depurar("nomeRanking", nomeRanking[i]);
 				for (int j = 4; j > i; j--) {
 					ranking[j] = ranking[j - 1];
 				}
@@ -338,7 +347,7 @@ void Jogo::telaGameOver()
 		}
 		for (int i = 0; i < 5; i++)
 			if (arqRank.is_open()) {
-				arqRank << nomeRanking <<ranking[i] << endl;
+				arqRank << nomeRanking[i] << " " << ranking[i] << endl;
 			}
 	}
 }
@@ -377,14 +386,14 @@ void Jogo::telaRanking()
 	{
 		telaAtual = tMenu;
 	}
-	else if (colocacao < 10 && colocacao > -1) {
+	/*else if (colocacao < 10 && colocacao > -1) {
 		texto.setString("Você está em " + to_string(colocacao + 1) + "º Lugar");
 		texto.setCor(255, 255, 255);
 		texto.desenhar(250, 430);
-	}
+	}*/
 	for (int i = 0; i < 5; i++) {
 
-		texto.setString(to_string(i + 1) + "º Lugar: " + to_string(ranking[i]));
+		texto.setString(nomeRanking[i] + ": " + to_string(ranking[i]));
 		texto.setCor(0, 0, 0);
 		texto.desenhar(gJanela.getLargura() / 2 - 150, (gJanela.getAltura() / 2 + 50 * i - 150));
 	}
@@ -409,7 +418,6 @@ bool Jogo::verificarVitoria()
 
 void Jogo::resetar()
 {
-	pontosJogadores = 0;
 	faseAtual = 1;
 	qtdVidas = 3;
 	player.desenhar(x, y);
@@ -465,7 +473,7 @@ void Jogo::carregarFase(int f)
 	{
 		inicializarFase("configs/fases/fase" + to_string(faseAtual) + ".txt", pontosJogadores, qtdVidas);
 	}
-	else {
+	/*else {
 
 		ofstream arqRanking("../ranking.txt");
 		for (int i = 0; i < 5; i++) {
@@ -481,12 +489,12 @@ void Jogo::carregarFase(int f)
 		for (int i = 0; i < 5; i++) {
 			if (arqRanking.is_open()) {
 
-				arqRanking << nomeRanking << ranking[i] << endl;
+				arqRanking << nomeRanking[i] << " " << ranking[i] << endl;
 			}
 			arqRanking.close();
 		}
 
-	}
+	}*/
 }
 
 void Jogo::desenharFase()
@@ -517,7 +525,7 @@ void Jogo::carregarRanking()
 	if (arqRanking.is_open()) {
 		for (int i = 0; i < 5; i++) {
 
-			arqRanking >> nomeRanking >> ranking[i];
+			arqRanking >> nomeRanking[i] >> ranking[i];
 		}
 	}
 }

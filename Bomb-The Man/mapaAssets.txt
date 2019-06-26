@@ -1,8 +1,12 @@
-SPRITE 6
+SPRITE 10
 FireBall assets/spritesheets/Fire.png 0 0
 Coin assets/spritesheets/Coin.png 0 0
-Explosion assets/spritesheets/Fire.png 0 0
+Bomb assets/spritesheets/bomba.png 0 0
+Explosion assets/spritesheets/fogo.png 0 0
+Tenis assets/spritesheets/tenisdomarson.png 0 0
+BombaUp assets/spritesheets/powerupbomb.png 0 0
 BomberMan assets/spritesheets/BomberMan.png 4 1
+Enemy assets/spritesheets/Enemy.png 4 1
 1 assets/blocos/1.png 0 0
 2 assets/blocos/2.png 0 0
 

@@ -9,6 +9,7 @@
 #include <stack>
 #include "Bloco.h"
 #include "Bomba.h"
+#include "PowerUp.h"
 
 using namespace std;
 
@@ -40,9 +41,10 @@ protected:
 	string user, senh, userTeste;
 
 	Texto texto;
-	string textoVidas, textoPontos, nomeRanking;
+	string textoVidas, textoPontos, nomeRanking[5];
 	Vetor2D posVidas, posPontos;
 	Cor corVidas, corPontos, corNomeRanking;
+	PowerUp power;
 
 	void telaJogo();
 	void telaMenu();

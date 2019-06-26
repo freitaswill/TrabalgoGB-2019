@@ -43,7 +43,7 @@ void InputTexto::finalizar()
 
 	//	Apagar o texto
 	txt.apagar();
-	txtSenha.apagar(); 
+	txtSenha.apagar();
 	txtNomeRanking.apagar();
 }
 
