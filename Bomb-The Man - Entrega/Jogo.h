@@ -71,7 +71,8 @@ protected:
 	int tileX = 1, tileY = 1;
 	void mover();
 	int mapa[13][13];
-	unsigned int cima, baixo, esquerda, direita;
+	int cima, baixo, esquerda, direita;
+	int cima2, baixo2, esquerda2, direita2;
 	bool colidiuBomb = false, colidiuTenis = false, segBomba = false;
 };
 

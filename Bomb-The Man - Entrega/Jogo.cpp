@@ -140,11 +140,6 @@ void Jogo::executar()
 
 void Jogo::telaJogo()
 {
-	/*if(colidiuComCaixa e mapa[tileX][tileY + 1] == 2)
-	{
-		mapa[tileX][tileY + 1] == 0;
-	}
-	*/
 
 	if (gTeclado.segurando[TECLA_9]) 
 	{
@@ -183,69 +178,83 @@ void Jogo::telaJogo()
 	enem.getSpriteEnem().desenhar(enem.getXEnemy(), enem.getYEnemy());
 	gDebug.depurar("bombas", bomba.getQtdBombas());
 
-	if (gTeclado.pressionou[TECLA_ESPACO] && bomba.getQtdBombas() >= 0 && bomba.getColocou() == false)
-	{
-		bomba.setColocou(true);
-		xAuxBomba = x;
-		yAuxBomba = y;
-		bomba.tiraBombas();
-	}
-
-	if(bomba.getColocou() == true)
-	{
-		for (int i = 0; i < 2; i++)
-		{
-			if (mapa[tileX][tileY + i + 1] == 0)
-			{
-				cima = i;
-			}
-			else
-			{
-				i = 50;
-			}
-		}
-
-		for (int i = 1; i > -2; i--)
-		{
-			if (mapa[tileX][tileY - i - 1] == 0)
-			{
-				baixo = i;
-			}
-			else
-			{
-				i = -50;
-			}
-		}
-
-		for (int i = 0; i > -2; i--)
-		{
-			if (mapa[tileX - i - 1][tileY] == 0)
-			{
-				esquerda = i;
-			}
-			else
-			{
-				i = -50;
-			}
-		}
-
-		for (int i = 0; i < 2; i++)
-		{
-			if (mapa[tileX + i + 1][tileY] == 0)
-			{
-				direita = i;
-			}
-			else
-			{
-				i = 50;
-			}
-		}
-
-		bomba.colocarBomba(xAuxBomba, yAuxBomba, cima, baixo, esquerda + 1, direita);
-	}
-
 	if (gTeclado.pressionou[TECLA_ESPACO] && bomba.getColocou() == true && bomba.getColocouSeg() == false && bomba.getQtdBombas() > 0)
-	{	
+	{
+		for (int i = 0; i < 3; i++)
+		{
+
+			if (mapa[tileX][tileY + i] == 0)
+			{
+				baixo2 = i;
+			}
+			else if (mapa[tileX][tileY + i] == 2)
+			{
+				mapa[tileX][tileY + i] = 0;
+				baixo2 = i;
+				i = 50;
+			}
+			else
+				i = 50;
+
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+
+			if (mapa[tileX][tileY - i] == 0)
+			{
+				cima2 = i;
+
+			}
+			else if (mapa[tileX][tileY - i] == 2)
+			{
+				mapa[tileX][tileY - i] = 0;
+				cima2 = i;
+				i = 50;
+			}
+			else
+			{
+				i = 50;
+			}
+
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (mapa[tileX - i][tileY] == 0)
+			{
+				esquerda2 = i;
+			}
+			else if (mapa[tileX - i][tileY] == 2)
+			{
+				mapa[tileX - i][tileY] = 0;
+				esquerda2 = i;
+				i = 50;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (mapa[tileX + i][tileY] == 0)
+			{
+				direita2 = i;
+			}
+			else if (mapa[tileX + i][tileY] == 2)
+			{
+				mapa[tileX + i][tileY] = 0;
+				direita2 = i;
+				i = 50;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
 		gDebug.erro("Entrei");
 		bomba.setColocouSeg(true);
 		xAuxBomba2 = x;
@@ -254,63 +263,112 @@ void Jogo::telaJogo()
 	}
 	if (bomba.getColocouSeg() == true)
 	{
-		for (int i = 0; i < 2; i++)
-		{
-			if (mapa[tileX][tileY + i + 1] == 0)
-			{
-				cima = i;
-			}
-			else
-			{
-				i = 50;
-			}
-		}
-
-		for (int i = 1; i > -2; i--)
-		{
-			if (mapa[tileX][tileY - i - 1] == 0)
-			{
-				baixo = i;
-			}
-			else
-			{
-				i = -50;
-			}
-		}
-
-		for (int i = 0; i > -2; i--)
-		{
-			if (mapa[tileX - i - 1][tileY] == 0)
-			{
-				esquerda = i;
-			}
-			else
-			{
-				i = -50;
-			}
-		}
-
-		for (int i = 0; i < 2; i++)
-		{
-			if (mapa[tileX + i + 1][tileY] == 0)
-			{
-				direita = i;
-			}
-			else
-			{
-				i = 50;
-			}
-		}
-
-		bomba.colocarSegundaBomba(xAuxBomba2, yAuxBomba2, cima, baixo, esquerda + 1, direita);
+		bomba.colocarSegundaBomba(xAuxBomba2, yAuxBomba2, cima2, baixo2, esquerda2 + 1, direita2);
 	}
 	else
 	{
-		direita = 0;
-		cima = 0;
-		esquerda = 0;
-		baixo = 0;
+		direita2 = 0;
+		cima2 = 0;
+		esquerda2 = 0;
+		baixo2 = 0;
 	}
+
+	if (gTeclado.pressionou[TECLA_ESPACO] && bomba.getQtdBombas() >= 0 && bomba.getColocou() == false)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+		
+			if (mapa[tileX][tileY + i] == 0)
+			{
+				baixo = i;
+			}
+			else if (mapa[tileX][tileY + i] == 2)
+			{
+				mapa[tileX][tileY + i] = 0;
+				baixo = i;
+				i = 50;
+			}
+			else
+				i = 50;
+			
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			
+			if (mapa[tileX][tileY - i ] == 0)
+			{
+				cima = i;
+
+			}
+			else if (mapa[tileX][tileY - i] == 2)
+			{
+				mapa[tileX][tileY - i] = 0;
+				cima = i;
+				i = 50;
+			}
+			else
+			{
+				i = 50;
+			}
+			
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (mapa[tileX - i][tileY] == 0)
+			{
+				esquerda = i;
+			}
+			else if (mapa[tileX - i][tileY] == 2)
+			{
+				mapa[tileX - i][tileY] = 0;
+				esquerda = i;
+				i = 50;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (mapa[tileX + i][tileY] == 0)
+			{
+				direita = i;
+			}
+			else if (mapa[tileX + i][tileY] == 2)
+			{
+				mapa[tileX + i][tileY] = 0;
+				direita = i;
+				i = 50;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		bomba.setColocou(true);
+		xAuxBomba = x;
+		yAuxBomba = y;
+		bomba.tiraBombas();
+	}
+
+	if(bomba.getColocou() == true)
+	{
+		bomba.colocarBomba(xAuxBomba, yAuxBomba, cima, baixo, esquerda+1, direita);
+	}
+	else
+	{
+		cima = 0;
+		baixo = 0;
+		direita = 0;
+		esquerda = 0;
+	}
+
+
 	
 	if (pontosJogadores > 1000)
 	{
@@ -725,6 +783,9 @@ void Jogo::mover()
 		if (y + 50 == yAux) {
 			direcao = 0;
 			tileY -= 1;
+			if (colidiuTenis) {
+				vel = 2;
+			}
 		}
 	}
 	else if (direcao == 2) {
@@ -732,6 +793,9 @@ void Jogo::mover()
 		if (y - 50 == yAux) {
 			direcao = 0;
 			tileY += 1;
+			if (colidiuTenis) {
+				vel = 2;
+			}
 		}
 	}
 	else if (direcao == 3) {
@@ -739,6 +803,9 @@ void Jogo::mover()
 		if (x - 50 == xAux) {
 			direcao = 0;
 			tileX += 1;
+			if (colidiuTenis) {
+				vel = 2;
+			}
 		}
 	}
 	else if (direcao == 4) {
@@ -746,6 +813,9 @@ void Jogo::mover()
 		if (x + 50 == xAux) {
 			direcao = 0;
 			tileX -= 1;
+			if (colidiuTenis) {
+				vel = 2;
+			}
 		}
 	}
 }
