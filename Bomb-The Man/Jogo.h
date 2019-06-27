@@ -68,5 +68,7 @@ protected:
 	int tileX = 1, tileY = 1;
 	void mover();
 	int mapa[13][13];
+	unsigned int cima, baixo, esquerda, direita;
+	bool coloc = false;
 };
 

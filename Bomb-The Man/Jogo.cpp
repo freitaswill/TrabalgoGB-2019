@@ -137,6 +137,7 @@ void Jogo::executar()
 
 void Jogo::telaJogo()
 {	
+	
 	if (gTeclado.pressionou[TECLA_M])
 	{
 		qtdVidas--;
@@ -150,8 +151,60 @@ void Jogo::telaJogo()
 	//else
 	desenharFase();
 	mover();
+	power.getSpriteTenis().desenhar(150, 50);
 	player.desenhar(x, y);
-	bomba.colocarBomba(x, y);
+	if (gTeclado.pressionou[TECLA_ESPACO])
+	{ 
+		for (int i = 0; i < 2; i++)
+		{
+			if (mapa[tileX][tileY + i + 1] == 0)
+			{
+				cima = i;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		for (int i = 1; i > -2; i--)
+		{
+			if (mapa[tileX][tileY - i - 1] == 0)
+			{
+				baixo = i;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		for (int i = 0; i > -2; i--)
+		{
+			if (mapa[tileX - i - 1][tileY] == 0)
+			{
+				esquerda = i;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			if (mapa[tileX + i + 1][tileY] == 0)
+			{
+				direita = i;
+			}
+			else
+			{
+				i = 50;
+			}
+		}
+
+		bomba.colocarBomba(x, y, cima, baixo, esquerda + 1, direita);
+	}
 
 	if (verificarVitoria() == true) {
 
@@ -164,9 +217,7 @@ void Jogo::telaJogo()
 	//Jogador Ganhou
 	if (faseAtual > nFases) {
 
-
 		telaAtual = tVitoria;
-
 	}
 
 	//Jogador perdeu
@@ -174,13 +225,12 @@ void Jogo::telaJogo()
 
 		telaAtual = tGameOver;
 		input.inicializar();
+		telas.push(fundoGameOver);
 	}
 }
 
 void Jogo::telaMenu()
 {
-	fundoMenu.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	gMouse.mostrarCursor();
 
 	bJogar.atualizar();
@@ -203,6 +253,7 @@ void Jogo::telaMenu()
 	if (bLogin.estaClicado())
 	{
 		telaAtual = tLogin;
+		telas.push(fundoLogin);
 	}
 
 	bCadastrar.atualizar();
@@ -210,6 +261,7 @@ void Jogo::telaMenu()
 	if (bCadastrar.estaClicado())
 	{
 		telaAtual = tCadastro;
+		telas.push(fundoCadastrar);
 	}
 
 	bCreditos.atualizar();
@@ -217,6 +269,7 @@ void Jogo::telaMenu()
 	if (bCreditos.estaClicado())
 	{
 		telaAtual = tCreditos;
+		telas.push(fundoCreditos);
 	}
 
 	bRanking.atualizar();
@@ -224,6 +277,7 @@ void Jogo::telaMenu()
 	if (bRanking.estaClicado())
 	{
 		telaAtual = tRanking;
+		telas.push(fundoRanking);
 	}
 
 	bLoad.atualizar();
@@ -231,13 +285,12 @@ void Jogo::telaMenu()
 	if (bLoad.estaClicado())
 	{
 		telaAtual = tLoad;
+		telas.push(fundoLoad);
 	}
 }
 
 void Jogo::telaCadastro()
 {
-	fundoCadastrar.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	if (input.getTrocaString() == true)
 	{
 		input.atualizar();
@@ -257,6 +310,7 @@ void Jogo::telaCadastro()
 		input.finalizar();
 		input.inicializar();
 		input.setTrocaString(false);
+		telas.push(fundoLogin);
 	}
 
 	bVoltar.atualizar();
@@ -264,13 +318,12 @@ void Jogo::telaCadastro()
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		telas.pop();
 	}
 }
 
 void Jogo::telaLogin()
 {
-	fundoLogin.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	carr.cadElog.setApertou(false);
 
 	if (gTeclado.pressionou[TECLA_TAB])
@@ -305,13 +358,12 @@ void Jogo::telaLogin()
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		telas.pop();
 	}
 }
 
 void Jogo::telaGameOver()
 {
-	fundoGameOver.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	texto.setString("Digite seu nome para colocar no ranking: ");
 	texto.desenhar(100, 200);
 	texto.setCor(corNomeRanking, true);
@@ -325,11 +377,8 @@ void Jogo::telaGameOver()
 	{
 		resetar();
 		telaAtual = tMenu;
-		/*for (int i = 0; i < 5; i++)
-		{
-			nomeRanking[i] = input.getTxtRanking().getString();
-			gDebug.depurar("nomeRanking", nomeRanking[i]);
-		}*/
+
+		telas.push(fundoMenu);
 		
 		pontosJogadores = pontosJogadores; 
 		ofstream arqRank("../ranking.txt");
@@ -354,37 +403,34 @@ void Jogo::telaGameOver()
 
 void Jogo::telaVitoria()
 {
-	fundoVitoria.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	bVoltar.atualizar();
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		telas.pop();
 	}
 }
 
 void Jogo::telaCreditos()
 {
-	fundoCreditos.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	bVoltar.atualizar();
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		telas.pop();
 	}
 }
 
 void Jogo::telaRanking()
 {
-	fundoRanking.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	bVoltar.atualizar();
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		telas.pop();
 	}
 	/*else if (colocacao < 10 && colocacao > -1) {
 		texto.setString("Você está em " + to_string(colocacao + 1) + "º Lugar");
@@ -401,13 +447,13 @@ void Jogo::telaRanking()
 
 void Jogo::telaLoad()
 {
-	fundoLoad.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-
 	bVoltar.atualizar();
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
 	{
 		telaAtual = tMenu;
+		telas.pop();
+		//telas.push(fundoMenu);
 	}
 }
 

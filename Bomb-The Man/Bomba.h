@@ -8,7 +8,7 @@ public:
 	Bomba();
 	~Bomba();
 	void explodir(int eCima, int eBaixo, int eEsquerda, int eDireita, int x, int y);
-	void colocarBomba(int xPlayer, int yPlayer);
+	void colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eEsquerda, int eDireita);
 	void setSpriteBomb(string sprite);
 	void setSpriteExplosion(string sprite);
 	//Mudar a sprite da bomba antes de explodir
@@ -20,7 +20,7 @@ public:
 private:
 	int contagemBom, contagemEx, xAux, yAux;
 	bool colocou;
-	int eCima, eBaixo, eEsquerda, eDireita;
+	int eCima = 0, eBaixo = 0, eEsquerda = 0, eDireita = 0;
 	Sprite bombSprite, explosao;
 };
 

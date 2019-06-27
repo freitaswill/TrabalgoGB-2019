@@ -36,16 +36,35 @@ void Bomba::explodir(int eCima, int eBaixo, int eEsquerda, int eDireita, int x, 
 	}
 }
 
-void Bomba::colocarBomba(int xPlayer, int yPlayer)
+void Bomba::colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eEsquerda, int eDireita)
 {	
 	srand(time(0));
 
-	if (gTeclado.pressionou[TECLA_ESPACO] && colocou == false)
+	if (eCima == NULL)
 	{
-		xAux = xPlayer;
-		yAux = yPlayer;
-		colocou = true;
+		eCima = 2;
 	}
+
+	if (eBaixo == NULL)
+	{
+		eBaixo = 2;
+	}
+
+	if (eEsquerda == NULL)
+	{
+		eEsquerda = 2;
+	}
+
+	if (eDireita == NULL)
+	{
+		eDireita = 2;
+	}
+
+	
+	xAux = xPlayer;
+	yAux = yPlayer;
+	colocou = true;
+	
 
 	if (colocou == true && contagemBom > 0)
 	{
@@ -60,7 +79,7 @@ void Bomba::colocarBomba(int xPlayer, int yPlayer)
 		if (contagemEx > 0)
 		{
 			gDebug.depurar("contagemExplos", contagemEx);
-			explodir(2, 2, 1, 2, xAux, yAux);
+			explodir(eCima, eBaixo, eEsquerda, eDireita, xAux, yAux);
 			contagemEx -= 1;
 		}
 		else
