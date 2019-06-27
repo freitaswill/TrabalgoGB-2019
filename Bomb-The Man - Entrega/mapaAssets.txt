@@ -1,0 +1,42 @@
+SPRITE 10
+FireBall assets/spritesheets/Fire.png 0 0
+Coin assets/spritesheets/Coin.png 0 0
+Bomb assets/spritesheets/bomba.png 0 0
+Explosion assets/spritesheets/fogo.png 0 0
+Tenis assets/spritesheets/tenisdomarson.png 0 0
+BombaUp assets/spritesheets/powerupbomb.png 0 0
+BomberMan assets/spritesheets/BomberMan.png 4 1
+Enemy assets/spritesheets/Enemy1.png 0 0
+1 assets/blocos/1.png 0 0
+2 assets/blocos/2.png 0 0
+
+FUNDO 10
+fundoMenu assets/fundos/fundoMenu.png
+fundoJogo assets/fundos/fundoJogo.png
+fundoJogo2 assets/fundos/fundoJogo2.png
+fundoGameOver assets/fundos/fundoGameOver.png
+fundoCadastrar assets/fundos/fundoCadastrar.png
+fundoCreditos assets/fundos/fundoCreditos.png
+fundoLoad assets/fundos/fundoLoad.png
+fundoLogin assets/fundos/fundoLogin.png
+fundoRanking assets/fundos/fundoRanking.png
+fundoWin assets/fundos/fundoWin.png
+
+BOTAO 10
+botaoJogar assets/botoes/botaoJogar.png 3
+botaoSair assets/botoes/Sair.png 3
+botaoCadastrar assets/botoes/botaoCadastrar.png 3
+botaoCreditos assets/botoes/botaoCreditos.png 3
+botaoSim assets/botoes/botaoSim.png 3
+botaoNao assets/botoes/botaoNao.png 3
+botaoVoltar assets/botoes/botaoVoltar.png 3
+botaoRanking assets/botoes/botaoRanking.png 3
+botaoLogin assets/botoes/botaoLogin.png 3
+botaoLoad assets/botoes/botaoSim.png 3
+
+AUDIO 1
+Scream assets/sons/rage.wav
+
+FONTE 2
+fonte1 assets/fontes/BRITANIC.TTF 32
+fonte2 assets/fontes/BAUHS93.TTF 32
