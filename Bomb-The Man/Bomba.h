@@ -8,17 +8,15 @@ public:
 	Bomba();
 	~Bomba();
 	void explodir(int eCima, int eBaixo, int eEsquerda, int eDireita, int x, int y);
-	void colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eEsquerda, int eDireita);
+	//void colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eEsquerda, int eDireita);
+	void colocarBomba(int xPlayer, int yPlayer);
 	void setSpriteBomb(string sprite);
 	void setSpriteExplosion(string sprite);
-	//Mudar a sprite da bomba antes de explodir
-
-	//Quando explodir para desenhar a explosao vao ser quatro variáveis -> terá um for para cada
-	//Ex: for(int i =0; i < variavel A; i++)
-	//desenhar(posição player(posicao da bomba talvez?) + 50 x i);
+	int getQtdBombas() { return qtdBombas; };
+	void setQtdBombas(int qtd) { qtdBombas = qtd; };
 
 private:
-	int contagemBom, contagemEx, xAux, yAux;
+	int contagemBom, contagemEx, xAux, yAux, qtdBombas, i;
 	bool colocou;
 	int eCima = 0, eBaixo = 0, eEsquerda = 0, eDireita = 0;
 	Sprite bombSprite, explosao;

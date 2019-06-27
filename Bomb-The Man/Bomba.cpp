@@ -6,6 +6,8 @@ Bomba::Bomba()
 	contagemEx = 120;
 	colocou = false;
 	eCima, eBaixo, eEsquerda, eDireita = 0;
+	qtdBombas = 1;
+	i = 0;
 }
 
 
@@ -36,7 +38,7 @@ void Bomba::explodir(int eCima, int eBaixo, int eEsquerda, int eDireita, int x, 
 	}
 }
 
-void Bomba::colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eEsquerda, int eDireita)
+/*void Bomba::colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eEsquerda, int eDireita)
 {	
 	srand(time(0));
 
@@ -87,6 +89,50 @@ void Bomba::colocarBomba(int xPlayer, int yPlayer, int eCima, int eBaixo, int eE
 			colocou = false;
 			contagemBom = 180;
 			contagemEx = 120;
+		}
+	}
+}*/
+
+void Bomba::colocarBomba(int xPlayer, int yPlayer)
+{
+	if (gTeclado.pressionou[TECLA_ESPACO] && colocou == false)
+	{
+		xAux = xPlayer;
+		yAux = yPlayer;
+		qtdBombas -= 1;
+		colocou = true;
+	}
+
+	if (colocou == true && contagemBom > 0)
+	{
+		bombSprite.desenhar(xAux, yAux);
+		contagemBom -= 1;
+	}
+
+	/*if (gTeclado.pressionou[TECLA_ESPACO] && qtdBombas >= 1 && colocou == true)
+	{
+		qtdBombas -= 1;
+		gDebug.erro("entrei");
+		bombSprite.desenhar(200, 200);
+	}*/
+
+	if (contagemBom <= 1)
+	{
+		if (contagemEx > 0)
+		{
+			//gDebug.depurar("contagemExplos", contagemEx);
+			explodir(2, 2, 2, 2, xAux, yAux);
+			contagemEx -= 1;
+		}
+		else
+		{
+			colocou = false;
+			contagemBom = 180;
+			contagemEx = 120;
+			if (qtdBombas <= 0)
+			{
+				qtdBombas = 1;
+			}
 		}
 	}
 }

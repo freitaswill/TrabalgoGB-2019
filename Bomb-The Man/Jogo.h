@@ -69,6 +69,6 @@ protected:
 	void mover();
 	int mapa[13][13];
 	unsigned int cima, baixo, esquerda, direita;
-	bool coloc = false;
+	bool colidiuBomb = false, colidiuTenis = false;
 };
 

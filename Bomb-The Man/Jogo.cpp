@@ -137,6 +137,18 @@ void Jogo::executar()
 
 void Jogo::telaJogo()
 {	
+	gDebug.depurar("dire", direcao);
+	if (uniTestarColisao(player, x, y, 0, power.getSpriteBombaUp(), power.getX1(), power.getY1(), 0))
+	{
+		colidiuBomb = true;
+		bomba.setQtdBombas(2);
+	}
+	else if (uniTestarColisao(player, x, y, 0, power.getSpriteTenis(), power.getX(), power.getY(), 0))
+	{
+		colidiuTenis = true;
+		vel = 2;
+		gDebug.depurar("direDentroDaColisao", direcao);
+	}
 	
 	if (gTeclado.pressionou[TECLA_M])
 	{
@@ -146,14 +158,21 @@ void Jogo::telaJogo()
 	pontosJogadores += 1;
 	gDebug.depurar("vidas", qtdVidas);
 
-	//if telaatual == 1
-	fundoJogo.desenhar(gJanela.getLargura() / 2, gJanela.getAltura() / 2);
-	//else
 	desenharFase();
 	mover();
-	power.getSpriteTenis().desenhar(150, 50);
+	gDebug.depurar("bombas", bomba.getQtdBombas());
+
+	if (colidiuTenis == false)
+	{
+		power.getSpriteTenis().desenhar(power.getX(), power.getY());
+	}
+	if (colidiuBomb == false)
+	{
+		power.getSpriteBombaUp().desenhar(power.getX1(), power.getY1());
+	}
 	player.desenhar(x, y);
-	if (gTeclado.pressionou[TECLA_ESPACO])
+	bomba.colocarBomba(x, y);
+	/*if (gTeclado.pressionou[TECLA_ESPACO])
 	{ 
 		for (int i = 0; i < 2; i++)
 		{
@@ -204,7 +223,7 @@ void Jogo::telaJogo()
 		}
 
 		bomba.colocarBomba(x, y, cima, baixo, esquerda + 1, direita);
-	}
+	}*/
 
 	if (verificarVitoria() == true) {
 
@@ -350,6 +369,7 @@ void Jogo::telaLogin()
 		{
 			input.finalizar();
 			telaAtual = tJogo;
+			telas.push(fundoJogo);
 		}
 	}
 

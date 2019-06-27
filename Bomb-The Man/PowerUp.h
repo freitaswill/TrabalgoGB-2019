@@ -12,13 +12,15 @@ public:
 	void aumentaFogo();*/
 	void setSpriteBombUp(string sprite);
 	void setSpriteTenis(string sprite);
-	Sprite getSpriteBomba() { return bombaUp; };
+	Sprite getSpriteBombaUp() { return bombaUp; };
 	Sprite getSpriteTenis() { return tenis; };
 	int getX() { return x; };
 	int getY() { return y; };
+	int getX1() { return x1; };
+	int getY1() { return y1; };
 
 private:
 	Sprite bombaUp, tenis;
-	int x = 150, y = 50;
+	int x, y, x1, y1;
 };
 
