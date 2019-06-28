@@ -1,19 +1,20 @@
 ﻿  Jogo.cpp
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(66): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(72): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(153): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(162): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(658): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(660): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(644): warning C4101: 'fToken': unreferenced local variable
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(721): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\willianfreitas\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(723): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  base.vcxproj -> C:\Users\willianfreitas\Desktop\libUnicornio-master\projetos\Bomb-The Man - Entrega\bin\base-debug.exe
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(45): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(48): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(51): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(54): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(57): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(60): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(63): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(66): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(69): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(72): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(156): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(165): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(689): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(691): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(675): warning C4101: 'fToken': variável local não referenciada
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(752): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+c:\users\theo5154\desktop\libunicornio-master\projetos\bomb-the man - entrega\jogo.cpp(754): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+  base.vcxproj -> C:\Users\Theo5154\Desktop\libUnicornio-master\projetos\Bomb-The Man - Entrega\bin\base-debug.exe
+  base.vcxproj -> C:\Users\Theo5154\Desktop\libUnicornio-master\projetos\Bomb-The Man - Entrega\bin\base-debug.pdb (Full PDB)

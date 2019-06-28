@@ -80,6 +80,9 @@ void Jogo::inicializar()
 	//carr.cadElog.setConta(0, carr.cadElog.getConta()->usuario, carr.cadElog.getConta()->senha);
 	carr.cadElog.setID(carr.getQtdContas());
 	carregarRanking();
+
+
+	texto.setFonte("fonte1");
 }
 
 void Jogo::finalizar()
@@ -141,7 +144,7 @@ void Jogo::executar()
 void Jogo::telaJogo()
 {
 
-	if (gTeclado.segurando[TECLA_9]) 
+	if (gTeclado.pressionou[TECLA_9]) 
 	{
 		faseAtual++;
 		carregarFase(faseAtual);
@@ -180,7 +183,7 @@ void Jogo::telaJogo()
 
 	if (gTeclado.pressionou[TECLA_ESPACO] && bomba.getColocou() == true && bomba.getColocouSeg() == false && bomba.getQtdBombas() > 0)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 
 			if (mapa[tileX][tileY + i] == 0)
@@ -195,10 +198,9 @@ void Jogo::telaJogo()
 			}
 			else
 				i = 50;
-
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 
 			if (mapa[tileX][tileY - i] == 0)
@@ -219,7 +221,7 @@ void Jogo::telaJogo()
 
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (mapa[tileX - i][tileY] == 0)
 			{
@@ -237,7 +239,7 @@ void Jogo::telaJogo()
 			}
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (mapa[tileX + i][tileY] == 0)
 			{
@@ -275,7 +277,7 @@ void Jogo::telaJogo()
 
 	if (gTeclado.pressionou[TECLA_ESPACO] && bomba.getQtdBombas() >= 0 && bomba.getColocou() == false)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 		
 			if (mapa[tileX][tileY + i] == 0)
@@ -293,7 +295,7 @@ void Jogo::telaJogo()
 			
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			
 			if (mapa[tileX][tileY - i ] == 0)
@@ -314,7 +316,7 @@ void Jogo::telaJogo()
 			
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (mapa[tileX - i][tileY] == 0)
 			{
@@ -332,7 +334,7 @@ void Jogo::telaJogo()
 			}
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (mapa[tileX + i][tileY] == 0)
 			{
@@ -370,12 +372,12 @@ void Jogo::telaJogo()
 
 
 	
-	if (pontosJogadores > 1000)
+	/*if (pontosJogadores > 1000)
 	{
 		faseAtual++;
 		carregarFase(faseAtual);
-	}
-	if (pontosJogadores > 2000) {
+	}*/
+	if (faseAtual > 2) {
 
 		telaAtual = tVitoria;
 		telas.push(fundoVitoria);
@@ -546,11 +548,12 @@ void Jogo::telaGameOver()
 		ofstream arqRank("../ranking.txt");
 		for (int i = 0; i < 5; i++) {
 			if (pontosJogadores > ranking[i]) {
-				nomeRanking[i] = input.getTxtRanking().getString();
 				gDebug.depurar("nomeRanking", nomeRanking[i]);
 				for (int j = 4; j > i; j--) {
 					ranking[j] = ranking[j - 1];
+					nomeRanking[j] = nomeRanking[j - 1];
 				}
+				nomeRanking[i] = input.getTxtRanking().getString();
 				colocacao = i;
 				ranking[i] = pontosJogadores;
 				i = 20;
@@ -565,13 +568,41 @@ void Jogo::telaGameOver()
 
 void Jogo::telaVitoria()
 {
+	texto.setString("Digite seu nome para colocar no ranking: ");
+	texto.desenhar(100, 200);
+	texto.setCor(corNomeRanking, true);
+
+	input.atualizarTexRanking();
+	input.desenharNomeRanking();
+
 	bVoltar.atualizar();
 	bVoltar.desenhar();
 	if (bVoltar.estaClicado())
-	{	
+	{
 		resetar();
 		telaAtual = tMenu;
+
 		telas.push(fundoMenu);
+
+		pontosJogadores = pontosJogadores;
+		ofstream arqRank("../ranking.txt");
+		for (int i = 0; i < 5; i++) {
+			if (pontosJogadores > ranking[i]) {
+				gDebug.depurar("nomeRanking", nomeRanking[i]);
+				for (int j = 4; j > i; j--) {
+					ranking[j] = ranking[j - 1];
+					nomeRanking[j] = nomeRanking[j - 1];
+				}
+				nomeRanking[i] = input.getTxtRanking().getString();
+				colocacao = i;
+				ranking[i] = pontosJogadores;
+				i = 20;
+			}
+		}
+		for (int i = 0; i < 5; i++)
+			if (arqRank.is_open()) {
+				arqRank << nomeRanking[i] << " " << ranking[i] << endl;
+			}
 	}
 }
 
